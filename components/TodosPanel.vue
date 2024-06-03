@@ -1,10 +1,14 @@
 <script setup lang="ts">
+  import { useSortable } from '@vueuse/integrations/useSortable'
   const { data: tasks, refresh } = await useFetch('/api/todos')
+
   const newtask = ref('')
   const showInput = ref<Boolean>(false)
   const currentTaskId = ref<number | null>(null)
   const currentTaskTitle = ref('')
   const headTitle = ref<string>('Add your new task')
+  const el = ref<HTMLElement | null>(null)
+
   async function addTodo (){
     if (!newtask.value.trim()) return
     await $fetch('/api/todos', {
@@ -74,6 +78,11 @@
       console.error('Failed to update task:', error)
     }
   }
+  if(tasks.value){
+    useSortable(el, tasks.value, {
+      handle: '.handle',
+    })
+  }
 </script>
 
 <template>
@@ -87,7 +96,7 @@
             </svg>
             <h4 class="font-semibold ml-3 text-lg">{{ headTitle }}</h4>
           </div>
-          <form @submit.prevent="addTodo">
+          <form @submit.prevent ref="el">
             <div class="mb-10 flex gap-4 w-full" v-if="!showInput">
               <input 
                 v-model="newtask" 
@@ -131,7 +140,7 @@
                 @dblclick="editTask(id, title)"
               >
                 <input class="hidden" type="checkbox" id="task_1" checked>
-                <label class="flex items-center w-full h-10 px-2 transition-all duration-100 rounded cursor-pointer hover:bg-gray-100" for="task_1">
+                <label class="handle flex items-center w-full h-10 px-2 transition-all duration-100 rounded cursor-pointer hover:bg-gray-100" for="task_1">
                   <span class="flex items-center justify-center w-5 h-5 text-transparent border-2 border-gray-300 rounded-full">
                     <IconsIconCheckBox/>
                   </span>
