@@ -1,17 +1,23 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ['@nuxthub/core', "@nuxt/eslint"],
+  modules: ['@nuxthub/core', "@nuxt/eslint", "@nuxtjs/tailwindcss"],
+  app: {
+		head: {
+			title: "Lucia example"
+		}
+	},
+  nitro: {
+    experimental: {
+      tasks: true
+    }
+  },
   hub: {
     database: true,
     kv: true,
-    blob: true,
-    cache: true,
   },
-  nitro: {
-    experimental: {
-      // Enable Server API documentation within NuxtHub
-      openAPI: true
-    }
-  }
+  runtimeConfig: {
+		githubClientId: process.env.GITHUB_CLIENT_ID,
+		githubClientSecret: process.env.GITHUB_CLIENT_SECRET
+	},
 })
