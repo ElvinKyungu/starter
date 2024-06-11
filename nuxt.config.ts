@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ['@nuxthub/core', "@nuxt/eslint", "@nuxtjs/tailwindcss"],
+  modules: ['@nuxthub/core', "@nuxt/eslint", "@nuxtjs/tailwindcss", "nuxt-auth-utils"],
   app: {
 		head: {
 			title: "Lucia example"
@@ -17,7 +17,15 @@ export default defineNuxtConfig({
     kv: true,
   },
   runtimeConfig: {
-		githubClientId: process.env.GITHUB_CLIENT_ID,
-		githubClientSecret: process.env.GITHUB_CLIENT_SECRET
+		oauth:{
+      github:{
+        clientId: process.env.GITHUB_CLIENT_ID,
+		    clientSecret: process.env.GITHUB_CLIENT_SECRET
+      },
+      google:{
+        clientId:'',
+        clientSecret:''
+      }
+    }
 	},
 })
